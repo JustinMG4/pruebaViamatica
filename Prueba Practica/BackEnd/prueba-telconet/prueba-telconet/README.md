@@ -53,5 +53,5 @@ http://localhost:8080/swagger-ui.html
 ---
 ![Endpoints](/images/Endpoints.png)
 ---
-![Endpoints](/images/Backend-Running.png)
----
+![Running](/images/Backend-Running.png)
+
