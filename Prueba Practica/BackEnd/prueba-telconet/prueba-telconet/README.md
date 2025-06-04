@@ -47,11 +47,11 @@ http://localhost:8080/swagger-ui.html
 ## 📸 Imágenes de la aplicación
 ![Swagger endpoints](./images/Swagger.png)
 ---
-![Unique Session](/images/Unique-Session.png)
+![Unique Session](./images/Unique-Session.png)
 ---
-![Login](/images/Login.png)
+![Login](./images/Login.png)
 ---
-![Endpoints](/images/Endpoints.png)
+![Endpoints](./images/Endpoints.png)
 ---
-![Running](/images/Backend-Running.png)
+![Running](./images/Backend-Running.png)
 
