@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UsersHistoryRepository extends JpaRepository<UsersHistory, Long> {
@@ -17,7 +16,8 @@ public interface UsersHistoryRepository extends JpaRepository<UsersHistory, Long
 
     List<UsersHistory> findAllByAppUserId(Long userId);
 
-    UsersHistory findTopByAppUser(AppUser appUser);
+    @Query("SELECT u FROM UsersHistory u WHERE u.appUser.id = :userId AND u.active = true")
+    UsersHistory findTopByAppUser(Long userId);
 
     UsersHistory findByAppUserAndActive(AppUser appUser, boolean active);
 

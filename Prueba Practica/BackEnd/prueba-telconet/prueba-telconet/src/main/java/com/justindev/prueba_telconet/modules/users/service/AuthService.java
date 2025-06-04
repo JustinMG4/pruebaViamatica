@@ -113,12 +113,12 @@ public class AuthService {
 
     public boolean isFirstLogin(String email) {
         var user = userRepository.findByPersonalEmailOrEmail(email).orElseThrow(() -> new ClientException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
-        return usersHistoryRepository.countByAppUserId(user.getId()) <= 1;
+        return usersHistoryRepository.countByAppUserId(user.getId()) < 2;
     }
 
     public void registerLogout(Long userId) {
         var user = userRepository.findById(userId).orElseThrow(() -> new ClientException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
-        var userHistory = usersHistoryRepository.findTopByAppUser(user);
+        var userHistory = usersHistoryRepository.findTopByAppUser(user.getId());
         if (userHistory != null) {
             userHistory.setLogoutDate(LocalDateTime.now());
             userHistory.setActive(false);
