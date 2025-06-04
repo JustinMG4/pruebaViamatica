@@ -1,0 +1,29 @@
+<div class="flex h-screen w-full items-center justify-center bg-white bg-cover bg-no-repeat">
+  <div class="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
+    <div class="text-white">
+      <div class="mb-8 flex flex-col items-center">
+        <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Glyph-Color-Logo.wine.svg" width="150" alt="" srcset="" />
+        <h1 class="mb-2 text-2xl">Instagram</h1>
+        <span class="text-gray-300">Datos de autenticación</span>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="mb-4 text-lg">
+          <input formControlName="username" class="rounded-3xl border-none bg-white text-black px-6 py-2 text-center placeholder-slate-400 shadow-lg outline-none backdrop-blur-md" type="text" placeholder="id@email.com" />
+          <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-red-500">
+            Username es requerido.
+          </div>
+        </div>
+
+        <div class="mb-4 text-lg">
+          <input formControlName="password" class="rounded-3xl border-none bg-white text-black px-6 py-2 text-center placeholder-slate-400 shadow-lg outline-none backdrop-blur-md" type="password" placeholder="*********" />
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500">
+            Password es requerido.
+          </div>
+        </div>
+        <div class="mt-8 flex justify-center text-lg text-black">
+          <button type="submit" class="rounded-3xl bg-blue-500 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-blue-700">Login</button>
+        </div>
+      </form> 
+    </div>
+  </div>
+</div>
