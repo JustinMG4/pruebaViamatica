@@ -44,11 +44,14 @@ http://localhost:8080/swagger-ui.html
 - Swagger
 
 ---
-![Swagger endpoints](https://uniandeseduec-my.sharepoint.com/:i:/g/personal/justinmg45_uniandes_edu_ec/ESDnl5jWVPVIsocDlfR6LE4BpeCDbrVDMQAD7D95T1rCcw?e=qjwJNE)
+## 📸 Imágenes de la aplicación
+![Swagger endpoints](./images/Swagger.png)
 ---
-![Unique Session](https://uniandeseduec-my.sharepoint.com/:i:/g/personal/justinmg45_uniandes_edu_ec/EWdvE4sYv_JIlQDSmkkt9zgBwiJRyHm3dfAJTIYbH8en9Q?e=PZ2Grc)
+![Unique Session](/images/Unique-Session.png)
 ---
-![Login](https://uniandeseduec-my.sharepoint.com/:i:/g/personal/justinmg45_uniandes_edu_ec/ERgXqyJEispPrSC6T7CCtG0B_Q0Al1bQC2_S0xiRloDpdw?e=1MYilg)
+![Login](/images/Login.png)
 ---
-![Endpoints](https://uniandeseduec-my.sharepoint.com/:i:/g/personal/justinmg45_uniandes_edu_ec/EeSy8gAZL9NBn7KWpXV4kAsB0SjUu2zrH-NnUJBnsiLbCg?e=AXUWCh)
+![Endpoints](/images/Endpoints.png)
+---
+![Endpoints](/images/Backend-Running.png)
 ---
