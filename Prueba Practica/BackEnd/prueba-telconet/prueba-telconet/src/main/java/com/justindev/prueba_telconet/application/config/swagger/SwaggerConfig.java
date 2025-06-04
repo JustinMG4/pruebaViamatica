@@ -12,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Prueba Telconet",
+                title = "Prueba Viamatica",
                 version = "1.0.0",
-                description = "API REST para la prueba de Telconet de Justin Moreira",
+                description = "API REST para la prueba de Viamatica de Justin Moreira",
                 contact = @Contact(
                         name = "Justin Moreira",
                         email = "justinmoreiragarcia@gmail.com"

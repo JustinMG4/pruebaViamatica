@@ -2,10 +2,9 @@ package com.justindev.prueba_telconet.modules.users.controller;
 
 import com.justindev.prueba_telconet.modules.users.dto.AuthResponseDto;
 import com.justindev.prueba_telconet.modules.users.dto.LoginDto;
-import com.justindev.prueba_telconet.modules.users.dto.UserRegisterDto;
-import com.justindev.prueba_telconet.modules.users.dto.WhoamiDto;
+import com.justindev.prueba_telconet.modules.users.dto.WhoAmIDto;
+import com.justindev.prueba_telconet.modules.users.model.AppUser;
 import com.justindev.prueba_telconet.modules.users.service.AuthService;
-import com.justindev.prueba_telconet.modules.users.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService service;
-    private final UserService userService;
 
 
     @PreAuthorize("permitAll()")
@@ -64,44 +63,6 @@ public class AuthController {
         return ResponseEntity.ok(service.login(dto));
     }
 
-    @PreAuthorize("permitAll()")
-    @PostMapping("/register")
-    @Operation(
-            summary = "Register",
-            description = "Register a new user",
-            tags = {"Authentication"},
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "User data to register",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UserRegisterDto.class)
-                    )
-            ),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "User created successfully",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserRegisterDto.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Error in the dto fields, non-compliance with validations",
-                            content = @Content(mediaType = "application/json")
-
-                    )
-
-            }
-    )
-    public ResponseEntity<String> register(
-            @RequestBody @Valid UserRegisterDto data
-    ) {
-        userService.registerUser(data);
-        return ResponseEntity.ok("User created successfully");
-    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/whoami")
@@ -113,7 +74,7 @@ public class AuthController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "User data",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = WhoamiDto.class)
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = WhoAmIDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -124,7 +85,7 @@ public class AuthController {
                     )
             }
     )
-    public ResponseEntity<WhoamiDto> whoAmI() {
+    public ResponseEntity<WhoAmIDto> whoAmI() {
         return ResponseEntity.ok(service.getAuthenticatedUser());
     }
 
@@ -136,4 +97,12 @@ public class AuthController {
         return ResponseEntity.ok(service.isFirstLogin(email));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            @AuthenticationPrincipal AppUser user
+    ) {
+        service.registerLogout(user.getId());
+        return ResponseEntity.ok("User logged out successfully");
+    }
 }

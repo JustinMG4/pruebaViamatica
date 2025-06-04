@@ -2,10 +2,7 @@ package com.justindev.prueba_telconet.modules.users.service;
 
 import com.justindev.prueba_telconet.application.exceptions.ClientException;
 import com.justindev.prueba_telconet.application.utils.EmailManager;
-import com.justindev.prueba_telconet.modules.users.dto.ChangePasswordDto;
-import com.justindev.prueba_telconet.modules.users.dto.MySessionsDto;
-import com.justindev.prueba_telconet.modules.users.dto.UpdateUserDto;
-import com.justindev.prueba_telconet.modules.users.dto.UserRegisterDto;
+import com.justindev.prueba_telconet.modules.users.dto.*;
 import com.justindev.prueba_telconet.modules.users.model.AppUser;
 import com.justindev.prueba_telconet.modules.users.model.Authorities;
 import com.justindev.prueba_telconet.modules.users.model.CodeForgetPassword;
@@ -17,6 +14,8 @@ import com.justindev.prueba_telconet.modules.users.repository.UsersHistoryReposi
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.passay.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -131,6 +130,15 @@ public class UserService {
         if (dto.getLastname()!= null) user.setLastname(dto.getLastname());
         if (dto.getPhone()!= null) user.setPhone(dto.getPhone());
         validateUpdateUser(user);
+        userRepository.save(user);
+    }
+
+    public void resetPassword(Long userId) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new ClientException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        if (user.getIdentification() == null) {
+            throw new ClientException("User does not have an identification number to reset the password", HttpStatus.BAD_REQUEST);
+        }
+        user.setPassword(passwordEncoder.encode(user.getIdentification()));
         userRepository.save(user);
     }
 
@@ -269,6 +277,21 @@ public class UserService {
                         .active(history.isActive())
                         .build())
                 .toList();
+    }
+
+    public Page<WhoAmIDto> getAllUsers(String identification,int page, int size) {
+        return userRepository.findAllByRoles(identification,Set.of(getAuthority(UserRoles.USER)) ,PageRequest.of(page, size))
+                .map(user -> WhoAmIDto.builder()
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .identification(user.getIdentification())
+                        .personalEmail(user.getPersonalEmail())
+                        .lastname(user.getLastname())
+                        .name(user.getName())
+                        .phone(user.getPhone())
+                        .address(user.getAddress())
+                        .roles(user.getRoles().stream().map(role -> role.getAuthority().name()).toList())
+                        .build());
     }
 
 

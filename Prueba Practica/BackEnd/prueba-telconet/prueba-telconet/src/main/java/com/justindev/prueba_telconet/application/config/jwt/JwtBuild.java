@@ -6,12 +6,15 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.justindev.prueba_telconet.modules.users.model.AppUser;
+import com.justindev.prueba_telconet.modules.users.model.UsersHistory;
 import com.justindev.prueba_telconet.modules.users.repository.UserRepository;
+import com.justindev.prueba_telconet.modules.users.repository.UsersHistoryRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -27,9 +30,11 @@ public class JwtBuild {
     private String userGenerator;
 
     private final UserRepository userRepository;
+    private final UsersHistoryRepository usersHistoryRepository;
 
-    public JwtBuild(UserRepository userRepository) {
+    public JwtBuild(UserRepository userRepository, UsersHistoryRepository usersHistoryRepository) {
         this.userRepository = userRepository;
+        this.usersHistoryRepository = usersHistoryRepository;
     }
 
     public String createToken(Authentication authentication) {
@@ -64,6 +69,17 @@ public class JwtBuild {
                     .build()
                     .verify(token);
         } catch (JWTVerificationException e) {
+            if (e.getMessage().contains("The Token has expired")) {
+                String username = extractUsername(JWT.decode(token));
+                userRepository.findByUsernameOrEmail(username).ifPresent(user -> {
+                    UsersHistory userHistory = usersHistoryRepository.findByAppUserAndActive(user, true);
+                    if (userHistory != null) {
+                        userHistory.setActive(false);
+                        userHistory.setLogoutDate(LocalDateTime.now());
+                        usersHistoryRepository.save(userHistory);
+                    }
+                });
+            }
             throw new JWTVerificationException("Invalid Token " + e.getMessage());
         }
     }

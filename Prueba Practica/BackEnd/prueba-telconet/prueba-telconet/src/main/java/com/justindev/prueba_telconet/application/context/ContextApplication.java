@@ -68,6 +68,8 @@ public class ContextApplication {
                     .lastname("admin")
                     .email(emailAdmin)
                     .username(emailAdmin)
+                    .identification("0000000000")
+                    .personalEmail("justinn@mail.com")
                     .password(passwordEncoder.encode(passwordAdmin))
                     .roles(Set.of(userRole))
                     .build());
